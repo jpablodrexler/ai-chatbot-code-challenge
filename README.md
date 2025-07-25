@@ -40,6 +40,7 @@ README.md # Project documentation
 4. Access the API at: http://127.0.0.1:5000/orders/1
 
 ### Example Response
+```json
 {
   "order_id": 1,
   "details": {
@@ -47,3 +48,4 @@ README.md # Project documentation
     "quantity": 1
   }
 }
+```
