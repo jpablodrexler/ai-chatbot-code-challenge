@@ -49,3 +49,15 @@ README.md # Project documentation
   }
 }
 ```
+
+## Authentication & Session Management
+
+Register a new user by running the following command in PowerShell:
+```bash
+   Invoke-RestMethod -Uri http://127.0.0.1:5000/users/register `  -Method POST `  -Body (@{username="alice"; password="password123"} | ConvertTo-Json) `  -ContentType "application/json"
+```
+
+Login by running the following command in PowerShell:
+```bash
+   Invoke-RestMethod -Uri http://127.0.0.1:5000/users/login `  -Method POST `  -Body (@{username="alice"; password="password123"} | ConvertTo-Json) `  -ContentType "application/json"
+```
