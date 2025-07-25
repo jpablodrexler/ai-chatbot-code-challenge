@@ -14,7 +14,7 @@
 
 ---
 
-## 🔍 User Story 5  
+## 🔍 User Story 2  
 **Como cliente, quiero buscar productos por nombre o categoría para encontrar lo que necesito rápidamente.**
 
 ### Acceptance Criteria:
@@ -28,7 +28,7 @@
 
 ---
 
-## 🛒 User Story 7  
+## 🛒 User Story 3  
 **Como cliente, quiero agregar productos al carrito desde el chat para facilitar mi compra.**
 
 ### Acceptance Criteria:
@@ -42,7 +42,7 @@
 
 ---
 
-## 💳 User Story 10  
+## 💳 User Story 4  
 **Como cliente, quiero que el chatbot me guíe en el proceso de pago para completar mi compra sin errores.**
 
 ### Acceptance Criteria:
