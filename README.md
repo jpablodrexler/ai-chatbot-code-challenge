@@ -24,17 +24,17 @@ README.md # Project documentation
    ```bash
    python -m venv venv
    Set-ExecutionPolicy Unrestricted -Scope Process
-   .\\venv\\Scripts\\activate`
+   .\\venv\\Scripts\\activate
 1. Create a virtual environment and activate it (on Mac):
    ```bash
    python -m venv venv
-   source venv/bin/activate`
+   source venv/bin/activate
 2. Install flask:
    ```bash
-   pip install Flask`
+   pip install Flask
 3. Run the application:
    ```bash
-   python .\\chatbot\\run.py`
+   python .\\chatbot\\run.py
 4. Access the API at: http://127.0.0.1:5000/orders/1
 
 ### Example Response
