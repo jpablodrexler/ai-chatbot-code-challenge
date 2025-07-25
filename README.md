@@ -11,12 +11,14 @@ For a more detailed description of the features in this project, please see [the
 
 ## Project Structure
 
+```
 chatbot/
 ├── app/
 │   ├── __init__.py  # Initializes the Flask app and registers blueprints
 │   └── routes.py    # Contains the /orders/ endpoint
 └── run.py # Entry point to run the Flask application
 README.md # Project documentation
+```
 
 ## Running the Project
 
