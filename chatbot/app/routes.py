@@ -1,5 +1,8 @@
 from flask import Blueprint, jsonify, request
+import jwt
+from datetime import datetime, timedelta
 
+secret_key = 'SecretKey'
 orders_bp = Blueprint('orders', __name__)
 
 # Sample order endpoint
@@ -46,4 +49,16 @@ def login():
         return jsonify({'error': 'User not found'}), 404
     if users[username] != hash_password(password):
         return jsonify({'error': 'Invalid password'}), 401
-    return jsonify({'message': 'Login successful'}), 200
+
+    # Generate JWT token
+    payload = {
+        'username': username,
+        'exp': datetime.utcnow() + timedelta(hours=1)  # Token expiration time
+    }
+    token = jwt.encode(payload, secret_key, algorithm='HS256')
+
+    # Return JWT token in the response
+    return jsonify({
+        'message': 'Login successful',
+        'token': token
+    }), 200
