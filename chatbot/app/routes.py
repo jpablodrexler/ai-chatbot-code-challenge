@@ -62,3 +62,21 @@ def login():
         'message': 'Login successful',
         'token': token
     }), 200
+
+# Chat endpoint
+@orders_bp.route('/chat', methods=['GET'])
+def chat():
+    # Check if the user is authenticated
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    # Decode the JWT token
+    try:
+        token = auth_header.split(' ')[1]
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+    except Exception:
+        return jsonify({'error': 'Invalid token'}), 401
+
+    # Return a chat response
+    return jsonify({'message': 'Chat initiated successfully'}), 200
