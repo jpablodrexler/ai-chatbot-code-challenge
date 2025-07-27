@@ -37,7 +37,10 @@ README.md # Project documentation
 3. Run the application:
    ```bash
    python .\\chatbot\\run.py
-4. Access the API at: http://127.0.0.1:5000/orders/1
+4. If running the chat locally, run the codegemma:7b model also locally:
+   ```bash
+   ollama run codegemma:7b
+5. Access the API at: http://127.0.0.1:5000/orders/1
 
 ### Example Response
 ```json

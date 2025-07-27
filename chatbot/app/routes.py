@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 import jwt
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
+import os
 from langchain_community.document_loaders import WebBaseLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.vectorstores import InMemoryVectorStore
@@ -15,8 +16,13 @@ orders_bp = Blueprint('orders', __name__)
 
 load_dotenv()
 
-model_temperature = None # todo: Set model temperature
-response_model = init_chat_model("ollama:codegemma:7b", temperature=model_temperature)
+model = os.environ.get('MODEL')
+model_temperature = os.environ.get('MODEL_TEMPERATURE')
+
+print('MODEL: ' + model)
+print('MODEL_TEMPERATURE: ' + model_temperature)
+
+response_model = init_chat_model(model, temperature=model_temperature)
 
 # Sample order endpoint
 @orders_bp.route('/orders/<int:id>', methods=['GET'])
