@@ -1,9 +1,22 @@
 from flask import Blueprint, jsonify, request
 import jwt
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+from langchain_community.document_loaders import WebBaseLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_openai import OpenAIEmbeddings
+from langchain.tools.retriever import create_retriever_tool
+from langgraph.graph import MessagesState
+from langchain.chat_models import init_chat_model
 
 secret_key = 'SecretKey'
 orders_bp = Blueprint('orders', __name__)
+
+load_dotenv()
+
+model_temperature = None # todo: Set model temperature
+response_model = init_chat_model("ollama:codegemma:7b", temperature=model_temperature)
 
 # Sample order endpoint
 @orders_bp.route('/orders/<int:id>', methods=['GET'])
@@ -64,7 +77,7 @@ def login():
     }), 200
 
 # Chat endpoint
-@orders_bp.route('/chat', methods=['GET'])
+@orders_bp.route('/chat', methods=['POST'])
 def chat():
     # Check if the user is authenticated
     auth_header = request.headers.get('Authorization')
@@ -77,6 +90,12 @@ def chat():
         payload = jwt.decode(token, secret_key, algorithms=['HS256'])
     except Exception:
         return jsonify({'error': 'Invalid token'}), 401
+    
+    data = request.get_json()
+    prompt = data.get('prompt')
 
+    # Asking a question to the model without using the knowledge database.
+    response = response_model.invoke(prompt).content
+    
     # Return a chat response
-    return jsonify({'message': 'Chat initiated successfully'}), 200
+    return jsonify({'response': response}), 200
