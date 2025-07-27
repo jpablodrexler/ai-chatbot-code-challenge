@@ -1,0 +1,5 @@
+Flask
+PyJWT
+langgraph 
+langchain[openai]
+langchain-community

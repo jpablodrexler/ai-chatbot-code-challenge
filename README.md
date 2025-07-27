@@ -31,10 +31,9 @@ README.md # Project documentation
    ```bash
    python -m venv venv
    source venv/bin/activate
-2. Install flask:
+2. Install requirements:
    ```bash
-   pip install Flask
-   pip install PyJWT
+   pip install -r requirements.txt
 3. Run the application:
    ```bash
    python .\\chatbot\\run.py
