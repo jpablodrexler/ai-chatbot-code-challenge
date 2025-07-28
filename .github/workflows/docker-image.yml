@@ -31,4 +31,4 @@ jobs:
           context: .
           file: ./chatbot/Dockerfile
           push: true
-          tags: my-flask-app:latest
+          tags: ai-chatbot:my-flask-app:latest
