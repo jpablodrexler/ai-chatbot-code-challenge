@@ -29,6 +29,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Chatbot/Dockerfile
+          file: ./chatbot/Dockerfile
           push: false
           tags: my-flask-app:latest
