@@ -32,3 +32,14 @@ jobs:
           file: ./chatbot/Dockerfile
           push: true
           tags: jpablodrexler/ai-chatbot:latest
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Deploy Docker container to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ai-chatbot-grupo66
+          images: docker.io/jpablodrexler/ai-chatbot:latest
