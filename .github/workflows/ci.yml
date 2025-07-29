@@ -46,4 +46,4 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ai-chatbot-grupo66
-          images: docker.io/jpablodrexler/ai-chatbot:${{ env.TAG }} 
+          images: docker.io/jpablodrexler/ai-chatbot:${{ env.TAG }}
