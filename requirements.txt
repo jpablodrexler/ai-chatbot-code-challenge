@@ -3,3 +3,4 @@ PyJWT
 langgraph 
 langchain[openai]
 langchain-community
+pytest
