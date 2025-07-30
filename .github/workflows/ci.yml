@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./chatbot/Dockerfile
+          file: ./Dockerfile
           push: true
           tags: jpablodrexler/ai-chatbot:${{ env.TAG }}
       
