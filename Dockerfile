@@ -18,4 +18,4 @@ RUN pip install langchain-community
 EXPOSE 5000
 
 # Run the application
-CMD ["python", "./run.py"]
+CMD ["python", "chatbot/run.py"]

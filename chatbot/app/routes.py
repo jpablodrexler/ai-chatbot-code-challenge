@@ -19,8 +19,8 @@ load_dotenv()
 model = os.environ.get('MODEL')
 model_temperature = os.environ.get('MODEL_TEMPERATURE')
 
-print('MODEL: ' + model)
-print('MODEL_TEMPERATURE: ' + model_temperature)
+print(model)
+print(model_temperature)
 
 response_model = init_chat_model(model, temperature=model_temperature)
 
