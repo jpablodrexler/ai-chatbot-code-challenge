@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy the current directory contents into the container
 COPY . /app
-COPY ../run.py /run.py
+COPY ../run.py /
 
 # Install dependencies
 RUN pip install Flask
