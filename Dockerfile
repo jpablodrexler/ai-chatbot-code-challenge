@@ -2,10 +2,10 @@
 FROM python:3.11-slim
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /chatbot
 
 # Copy the current directory contents into the container
-COPY . /app
+COPY . /chatbot
 
 # Install dependencies
 RUN pip install Flask
@@ -18,4 +18,4 @@ RUN pip install langchain-community
 EXPOSE 5000
 
 # Run the application
-CMD ["python", "run.py"]
+CMD ["python", "./run.py"]

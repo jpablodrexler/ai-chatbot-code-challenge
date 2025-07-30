@@ -15,7 +15,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+      
+      - name: Set up Docker tag with datetime
+        id: vars
+        run: echo "TAG=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
+      
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -29,6 +33,17 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./chatbot/Dockerfile
+          file: ./Dockerfile
           push: true
-          tags: jpablodrexler/ai-chatbot:latest
+          tags: jpablodrexler/ai-chatbot:${{ env.TAG }}
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Deploy Docker container to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ai-chatbot-grupo66
+          images: docker.io/jpablodrexler/ai-chatbot:${{ env.TAG }}
