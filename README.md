@@ -58,7 +58,7 @@ README.md # Project documentation
 Register a new user by running the following request in Postman:
 ```bash
    Method: POST
-   URL: http://127.0.0.1:5000/users/register
+   URL: https://ai-chatbot-grupo66-fkgmbmedhxgqf7b6.centralus-01.azurewebsites.net/users/register
    Body: Raw / JSON
       {
          "username": "alice",
@@ -69,7 +69,7 @@ Register a new user by running the following request in Postman:
 Login by running the following request in Postman:
 ```bash
    Method: POST
-   URL: http://127.0.0.1:5000/users/login
+   URL: https://ai-chatbot-grupo66-fkgmbmedhxgqf7b6.centralus-01.azurewebsites.net/users/login
    Body: Raw / JSON
       {
          "username": "alice",
@@ -80,10 +80,10 @@ Login by running the following request in Postman:
 Send a request to the chat by running the following request in Postman:
 ```bash
    Method: POST
-   URL: http://127.0.0.1:5000/chat
+   URL: https://ai-chatbot-grupo66-fkgmbmedhxgqf7b6.centralus-01.azurewebsites.net/chat
    Authorization:
       Type: Bearer Token
-      Token: {token returned from http://127.0.0.1:5000/users/login}
+      Token: {token returned from https://ai-chatbot-grupo66-fkgmbmedhxgqf7b6.centralus-01.azurewebsites.net/users/login}
    Body: Raw / JSON
       {
          "prompt": "hello"
