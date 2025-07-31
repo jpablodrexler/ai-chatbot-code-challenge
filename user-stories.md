@@ -12,6 +12,26 @@
   **When** el cliente lo ingresa,  
   **Then** el chatbot debe informar que no se encontró el pedido y ofrecer asistencia adicional.
 
+**Endpoint REST:**  
+`GET http://127.0.0.1:5000/orders/{order_id}`
+
+**Ejemplo:**  
+`GET http://127.0.0.1:5000/orders/1`
+
+**Respuesta ejemplo:**  
+```json
+{
+  "order_id": 1,
+  "details": {
+    "item": "Laptop",
+    "quantity": 1,
+    "status": "En tránsito",
+    "estimated_delivery": "2024-08-05",
+    "tracking_number": "ABC123456"
+  }
+}
+```
+
 ---
 
 ## 🔍 User Story 2  
@@ -25,6 +45,25 @@
 - **Given** que no hay coincidencias con la búsqueda,  
   **When** el cliente realiza la consulta,  
   **Then** el chatbot debe sugerir categorías relacionadas o permitir refinar la búsqueda.
+
+**Endpoint REST:**  
+`GET http://127.0.0.1:5000/products?search={nombre_o_categoria}`
+
+**Ejemplo:**  
+`GET http://127.0.0.1:5000/products?search=laptop`
+
+**Respuesta ejemplo:**  
+```json
+[
+  {
+    "product_id": 101,
+    "name": "Laptop",
+    "image": "https://example.com/laptop.jpg",
+    "price": 1200,
+    "available": true
+  }
+]
+```
 
 ---
 
@@ -40,6 +79,25 @@
   **When** el cliente intenta agregarlo,  
   **Then** el chatbot debe informar que no está disponible y ofrecer productos similares.
 
+**Endpoint REST:**  
+`POST http://127.0.0.1:5000/cart/add`
+
+**Ejemplo:**  
+```json
+{
+  "product_id": 101,
+  "quantity": 1
+}
+```
+
+**Respuesta ejemplo:**  
+```json
+{
+  "message": "Producto agregado al carrito",
+  "cart_total": 1200
+}
+```
+
 ---
 
 ## 💳 User Story 4  
@@ -53,3 +111,24 @@
 - **Given** que ocurre un error durante el pago,  
   **When** el cliente lo reporta o el sistema lo detecta,  
   **Then** el chatbot debe informar el problema y ofrecer alternativas o asistencia.
+
+**Endpoint REST:**  
+`POST http://127.0.0.1:5000/checkout`
+
+**Ejemplo:**  
+```json
+{
+  "cart_id": 55,
+  "payment_method": "credit_card",
+  "card_info": "**** **** **** 1234"
+}
+```
+
+**Respuesta ejemplo:**  
+```json
+{
+  "message": "Pago realizado con éxito",
+  "order_id": 1,
+  "status": "Confirmado"
+}
+```
