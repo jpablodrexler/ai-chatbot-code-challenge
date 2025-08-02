@@ -1,4 +1,6 @@
 Flask
+flask-login
+flask-bcrypt
 PyJWT
 langgraph 
 langchain[openai]
