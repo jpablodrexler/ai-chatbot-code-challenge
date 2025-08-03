@@ -9,6 +9,8 @@ COPY . /chatbot
 
 # Install dependencies
 RUN pip install Flask
+RUN pip install flask-login
+RUN pip install flask-bcrypt
 RUN pip install PyJWT
 RUN pip install langgraph
 RUN pip install langchain[openai]
