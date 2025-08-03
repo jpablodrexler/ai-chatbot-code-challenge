@@ -102,6 +102,10 @@ Send a request to the chat by running the following request in Postman:
 
 ![Login page](loginui.png)
 
+Out-of-the-box credentials:
+- User: admin
+- Password: admin123
+
 ### Chat (user must be authenticated through the login page)
 
 [Chat page](http://127.0.0.1:5000/chatui)
