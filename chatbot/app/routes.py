@@ -27,16 +27,10 @@ print(model_temperature)
 
 response_model = init_chat_model(model, temperature=model_temperature)
 
-# Sample order endpoint
-@orders_bp.route('/orders/<int:id>', methods=['GET'])
-def get_order(id):
-    return jsonify({
-        'order_id': id,
-        'details': {
-            'item': 'Laptop',
-            'quantity': 1
-        }
-    })
+# Health check
+@orders_bp.route('/health', methods=['GET'])
+def get_health():
+    return "OK", 200
 
 # Register user endpoint
 @orders_bp.route('/users/register', methods=['POST'])
