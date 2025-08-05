@@ -1,5 +1,7 @@
 import os
 import openai
+import requests
+import json
 from flask import Blueprint, request, jsonify, render_template_string, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 import jwt
@@ -16,24 +18,57 @@ openai.api_base = os.getenv("AZURE_OPENAI_ENDPOINT")
 openai.api_version = "2023-05-15"
 
 def send_promt_to_model(prompt):
-    try:
-        client = openai.AzureOpenAI(
-            api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-            api_version="2023-05-15",
-            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
-        )
-        response = client.chat.completions.create(
-            model=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
-            messages=[
-                {"role": "system", "content": "Eres un asistente cordial y amable para e-commerce."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=256,
-            temperature=float(os.getenv("MODEL_TEMPERATURE", 0.7))  # <-- Usa la variable de entorno
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        return f"Error: {str(e)}"
+    # Si hay configuración de Azure OpenAI, usa Azure
+    if os.getenv("AZURE_OPENAI_API_KEY") and os.getenv("AZURE_OPENAI_ENDPOINT") and os.getenv("AZURE_OPENAI_DEPLOYMENT"):
+        try:
+            client = openai.AzureOpenAI(
+                api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+                api_version="2023-05-15",
+                azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+            )
+            response = client.chat.completions.create(
+                model=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
+                messages=[
+                    {"role": "system", "content": "Eres un asistente cordial y amable para e-commerce."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=256,
+                temperature=float(os.getenv("MODEL_TEMPERATURE", 0.7))
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            return f"Error: {str(e)}"
+    # Si hay configuración de modelo local, usa el modelo local
+    elif os.getenv("MODEL") and os.getenv("MODEL").startswith("ollama:"):
+        try:
+            # Extrae el nombre completo del modelo, incluyendo ":7b"
+            ollama_model = os.getenv("MODEL").replace("ollama:", "")
+            ollama_url = "http://localhost:11434/api/generate"
+            payload = {
+                "model": ollama_model,  # Debe ser "codegemma:7b"
+                "prompt": prompt,
+                "temperature": float(os.getenv("MODEL_TEMPERATURE", 0.7))
+            }
+            response = requests.post(ollama_url, json=payload)
+            if response.status_code == 200:
+                lines = response.text.strip().split('\n')
+                full_response = ""
+                for line in lines:
+                    try:
+                        result = json.loads(line)
+                        if "response" in result and result["response"].strip():
+                            full_response += result["response"]
+                    except Exception:
+                        continue
+                if full_response:
+                    return full_response
+                return "Error: No se pudo procesar la respuesta del modelo local."
+            else:
+                return f"Error: {response.text}"
+        except Exception as e:
+            return f"Error: {str(e)}"
+    else:
+        return "Error: No hay configuración válida de modelo en .env"
 
 # Health check
 @orders_bp.route('/health', methods=['GET'])
