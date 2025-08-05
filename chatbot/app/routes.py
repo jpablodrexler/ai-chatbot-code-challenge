@@ -25,10 +25,11 @@ def send_promt_to_model(prompt):
         response = client.chat.completions.create(
             model=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
             messages=[
-                {"role": "system", "content": "Eres un asistente útil para e-commerce."},
+                {"role": "system", "content": "Eres un asistente cordial y amable para e-commerce."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=256
+            max_tokens=256,
+            temperature=float(os.getenv("MODEL_TEMPERATURE", 0.7))  # <-- Usa la variable de entorno
         )
         return response.choices[0].message.content
     except Exception as e:
