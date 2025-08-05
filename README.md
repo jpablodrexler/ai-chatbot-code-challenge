@@ -40,7 +40,7 @@ README.md # Project documentation
 4. If running the chat locally, run the codegemma:7b model also locally:
    ```bash
    ollama run codegemma:7b
-5. Access the API at: http://127.0.0.1:5000/orders/1
+5. Access the API at: https://ai-chatbot-grupo66-fkgmbmedhxgqf7b6.centralus-01.azurewebsites.net/health
 
 ### Example Response
 ```json
@@ -98,7 +98,7 @@ Send a request to the chat by running the following request in Postman:
 
 ### Authentication & Session Management
 
-[Login page](http://127.0.0.1:5000/loginui)
+[Login page](https://ai-chatbot-grupo66-fkgmbmedhxgqf7b6.centralus-01.azurewebsites.net/loginui)
 
 ![Login page](loginui.png)
 
@@ -108,7 +108,7 @@ Out-of-the-box credentials:
 
 ### Chat (user must be authenticated through the login page)
 
-[Chat page](http://127.0.0.1:5000/chatui)
+[Chat page](https://ai-chatbot-grupo66-fkgmbmedhxgqf7b6.centralus-01.azurewebsites.net/chatui)
 
 ![Login page](chatui.png)
 
