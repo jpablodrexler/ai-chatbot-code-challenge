@@ -8,6 +8,7 @@ import jwt
 from datetime import datetime, timedelta
 from app.models import User
 from app.user_store import list_users, add_user, get_user, hash_password
+import time
 
 secret_key = 'SecretKey'
 orders_bp = Blueprint('orders', __name__)
@@ -18,7 +19,7 @@ openai.api_base = os.getenv("AZURE_OPENAI_ENDPOINT")
 openai.api_version = "2023-05-15"
 
 def send_promt_to_model(prompt):
-    # Si hay configuración de Azure OpenAI, usa Azure
+    # Azure OpenAI
     if os.getenv("AZURE_OPENAI_API_KEY") and os.getenv("AZURE_OPENAI_ENDPOINT") and os.getenv("AZURE_OPENAI_DEPLOYMENT"):
         try:
             client = openai.AzureOpenAI(
@@ -26,47 +27,67 @@ def send_promt_to_model(prompt):
                 api_version="2023-05-15",
                 azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
             )
-            response = client.chat.completions.create(
-                model=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
-                messages=[
-                    {"role": "system", "content": "Eres un asistente cordial y amable para e-commerce."},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=256,
-                temperature=float(os.getenv("MODEL_TEMPERATURE", 0.7))
-            )
-            return response.choices[0].message.content
+            for attempt in range(2):  # 1 reintento en caso de rate limit
+                try:
+                    response = client.chat.completions.create(
+                        model=os.getenv("AZURE_OPENAI_DEPLOYMENT"),
+                        messages=[
+                            {"role": "system", "content": "Eres un asistente cordial y amable para e-commerce."},
+                            {"role": "user", "content": prompt}
+                        ],
+                        max_tokens=256,
+                        temperature=float(os.getenv("MODEL_TEMPERATURE", 0.7))
+                    )
+                    return response.choices[0].message.content
+                except openai.RateLimitError:
+                    if attempt == 0:
+                        time.sleep(2)
+                        continue
+                    else:
+                        return "El servicio está ocupado. Por favor, intenta nuevamente en unos segundos."
+        except openai.AuthenticationError:
+            return "Error de autenticación con Azure OpenAI. Verifica tu API Key."
+        except openai.APIConnectionError:
+            return "No se pudo conectar a Azure OpenAI. Intenta más tarde."
         except Exception as e:
-            return f"Error: {str(e)}"
-    # Si hay configuración de modelo local, usa el modelo local
+            return f"Ocurrió un error inesperado: {str(e)}"
+    # Ollama local
     elif os.getenv("MODEL") and os.getenv("MODEL").startswith("ollama:"):
         try:
-            # Extrae el nombre completo del modelo, incluyendo ":7b"
             ollama_model = os.getenv("MODEL").replace("ollama:", "")
             ollama_url = "http://localhost:11434/api/generate"
             payload = {
-                "model": ollama_model,  # Debe ser "codegemma:7b"
+                "model": ollama_model,
                 "prompt": prompt,
                 "temperature": float(os.getenv("MODEL_TEMPERATURE", 0.7))
             }
-            response = requests.post(ollama_url, json=payload)
-            if response.status_code == 200:
-                lines = response.text.strip().split('\n')
-                full_response = ""
-                for line in lines:
-                    try:
-                        result = json.loads(line)
-                        if "response" in result and result["response"].strip():
-                            full_response += result["response"]
-                    except Exception:
+            for attempt in range(2):  # 1 reintento en caso de rate limit
+                response = requests.post(ollama_url, json=payload)
+                if response.status_code == 429:
+                    if attempt == 0:
+                        time.sleep(2)
                         continue
-                if full_response:
-                    return full_response
-                return "Error: No se pudo procesar la respuesta del modelo local."
-            else:
-                return f"Error: {response.text}"
+                    else:
+                        return "El modelo local está ocupado. Intenta nuevamente en unos segundos."
+                elif response.status_code == 200:
+                    lines = response.text.strip().split('\n')
+                    full_response = ""
+                    for line in lines:
+                        try:
+                            result = json.loads(line)
+                            if "response" in result and result["response"].strip():
+                                full_response += result["response"]
+                        except Exception:
+                            continue
+                    if full_response:
+                        return full_response
+                    return "Error: No se pudo procesar la respuesta del modelo local."
+                else:
+                    return f"Error: {response.text}"
+        except requests.ConnectionError:
+            return "No se pudo conectar al modelo local. Asegúrate de que Ollama esté corriendo."
         except Exception as e:
-            return f"Error: {str(e)}"
+            return f"Ocurrió un error inesperado: {str(e)}"
     else:
         return "Error: No hay configuración válida de modelo en .env"
 
