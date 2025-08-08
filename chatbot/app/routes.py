@@ -1,3 +1,5 @@
+from azure.search.documents import SearchClient
+from azure.core.credentials import AzureKeyCredential
 import os
 import openai
 import requests
@@ -18,59 +20,41 @@ openai.api_key = os.getenv("AZURE_OPENAI_API_KEY")
 openai.api_base = os.getenv("AZURE_OPENAI_ENDPOINT")
 openai.api_version = "2023-05-15"
 
+def get_vector_search_context_sdk(prompt_embedding, top_k=3):
+    """
+    Query Azure AI Search vector resource using azure-search-documents SDK and return relevant context chunks.
+    """
+    SEARCH_ENDPOINT = os.getenv('AZURE_SEARCH_ENDPOINT')
+    SEARCH_API_KEY = os.getenv('AZURE_SEARCH_ADMIN_KEY')
+    SEARCH_INDEX = os.getenv('AZURE_SEARCH_INDEX', 'documents')
+    try:
+        client = SearchClient(
+            endpoint=SEARCH_ENDPOINT,
+            index_name=SEARCH_INDEX,
+            credential=AzureKeyCredential(SEARCH_API_KEY)
+        )
+        results = client.search(
+            search_text=prompt_embedding,  # Empty for pure vector search
+            # vector=prompt_embedding,
+            # vector_fields="embedding",
+            top=top_k,
+            select=["content"]
+        )
+        context_chunks = [doc["content"] for doc in results if "content" in doc]
+        print(f"SDK context chunks found: {len(context_chunks)}")
+        if context_chunks:
+            return "\n---\n".join(context_chunks)
+    except Exception as e:
+        print(f"SDK Error retrieving context: {str(e)}")
+    return ""
+
 def send_prompt_to_model(prompt):
     print(f"Received prompt: {prompt}")  # Log the prompt for debugging
 
     # Retrieve or initialize message history from session
     history = session.get('message_history', [])
 
-    # --- Vector Search: Retrieve relevant context from Azure AI Search ---
-    SEARCH_ENDPOINT = os.getenv('AZURE_SEARCH_ENDPOINT')
-    SEARCH_API_KEY = os.getenv('AZURE_SEARCH_ADMIN_KEY')
-    SEARCH_INDEX = os.getenv('AZURE_SEARCH_INDEX', 'documents')
-    EMBEDDING_MODEL = os.getenv('AZURE_EMBEDDING_MODEL', 'text-embedding-ada-002')
-    context = ""
-    try:
-        # 1. Get embedding for the prompt using Azure OpenAI Embeddings API
-        client = openai.AzureOpenAI(
-            api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-            api_version="2023-05-15",
-            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
-        )
-        embedding_response = client.embeddings.create(
-            input=prompt,
-            model=EMBEDDING_MODEL
-        )
-        prompt_embedding = embedding_response.data[0].embedding
-
-        # 2. Search vector DB for top 3 relevant chunks
-        search_url = f"{SEARCH_ENDPOINT}/indexes/{SEARCH_INDEX}/docs/search?api-version=2023-11-01"
-        headers = {
-            'Content-Type': 'application/json',
-            'api-key': SEARCH_API_KEY
-        }
-        search_body = {
-            "vector": {
-                "value": prompt_embedding,
-                "fields": "embedding",
-                "k": 3
-            },
-            "top": 3,
-            "select": "content"
-        }
-        r = requests.post(search_url, headers=headers, json=search_body)
-        print(f"Search response: {r.json()}")
-        if r.status_code == 200:
-            results = r.json().get('value', [])
-            print(f"Search results: {results}")
-            context_chunks = [doc['content'] for doc in results if 'content' in doc]
-            print(f"Context chunks found: {len(context_chunks)}")
-            if context_chunks:
-                context = "\n---\n".join(context_chunks)
-    except Exception as e:
-        print(f"Error retrieving context: {str(e)}")
-        context = ""  # If retrieval fails, continue without context
-
+    context = get_vector_search_context_sdk(prompt)
     print(f"Context retrieved: {context[:100]}...")  # Log first 100 chars of context for debugging
 
     # Compose messages for model (system + history + context + new prompt)
@@ -80,6 +64,8 @@ def send_prompt_to_model(prompt):
     if context:
         messages.append({"role": "system", "content": f"Contexto relevante:\n{context}"})
     messages.append({"role": "user", "content": prompt})
+
+    print(f"Messages prepared for model: {messages}")
 
     response_text = None
     # Azure OpenAI
@@ -251,7 +237,7 @@ chat_template = """
     <title>Chat Interface</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f0f0f0; }
-        .chat-container { width: 400px; margin: 50px auto; background-color: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .chat-container { width: 400px; margin: 50px auto; background-color: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; }
         .message { padding: 10px; margin: 5px 0; border-radius: 10px; max-width: 80%; }
         .user { background-color: #dcf8c6; text-align: right; }
         .bot { background-color: #ececec; text-align: left; }
@@ -259,6 +245,17 @@ chat_template = """
         .input-container { display: flex; margin-top: 10px; }
         input[type="text"] { flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
         button { padding: 10px; border: none; background-color: #4CAF50; color: white; border-radius: 5px; margin-left: 5px; cursor: pointer; }
+        .logout-btn {
+            background-color: #f44336;
+            position: fixed;
+            right: 30px;
+            top: 30px;
+            z-index: 1000;
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
@@ -276,6 +273,9 @@ chat_template = """
             </div>
         </form>
     </div>
+    <form method="get" action="{{ url_for('orders.logoutui') }}">
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
 </body>
 </html>
 """
@@ -408,4 +408,7 @@ def loginui():
 @login_required
 def logoutui():
     logout_user()
+    # Clear chat history from session
+    session.pop('message_history', None)
+    session.pop('username', None)
     return redirect(url_for('orders.loginui'))
