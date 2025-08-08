@@ -19,12 +19,66 @@ openai.api_base = os.getenv("AZURE_OPENAI_ENDPOINT")
 openai.api_version = "2023-05-15"
 
 def send_prompt_to_model(prompt):
+    print(f"Received prompt: {prompt}")  # Log the prompt for debugging
+
     # Retrieve or initialize message history from session
     history = session.get('message_history', [])
-    # Compose messages for model (system + history + new prompt)
+
+    # --- Vector Search: Retrieve relevant context from Azure AI Search ---
+    SEARCH_ENDPOINT = os.getenv('AZURE_SEARCH_ENDPOINT')
+    SEARCH_API_KEY = os.getenv('AZURE_SEARCH_ADMIN_KEY')
+    SEARCH_INDEX = os.getenv('AZURE_SEARCH_INDEX', 'documents')
+    EMBEDDING_MODEL = os.getenv('AZURE_EMBEDDING_MODEL', 'text-embedding-ada-002')
+    context = ""
+    try:
+        # 1. Get embedding for the prompt using Azure OpenAI Embeddings API
+        client = openai.AzureOpenAI(
+            api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+            api_version="2023-05-15",
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+        )
+        embedding_response = client.embeddings.create(
+            input=prompt,
+            model=EMBEDDING_MODEL
+        )
+        prompt_embedding = embedding_response.data[0].embedding
+
+        # 2. Search vector DB for top 3 relevant chunks
+        search_url = f"{SEARCH_ENDPOINT}/indexes/{SEARCH_INDEX}/docs/search?api-version=2023-11-01"
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': SEARCH_API_KEY
+        }
+        search_body = {
+            "vector": {
+                "value": prompt_embedding,
+                "fields": "embedding",
+                "k": 3
+            },
+            "top": 3,
+            "select": "content"
+        }
+        r = requests.post(search_url, headers=headers, json=search_body)
+        print(f"Search response: {r.json()}")
+        if r.status_code == 200:
+            results = r.json().get('value', [])
+            print(f"Search results: {results}")
+            context_chunks = [doc['content'] for doc in results if 'content' in doc]
+            print(f"Context chunks found: {len(context_chunks)}")
+            if context_chunks:
+                context = "\n---\n".join(context_chunks)
+    except Exception as e:
+        print(f"Error retrieving context: {str(e)}")
+        context = ""  # If retrieval fails, continue without context
+
+    print(f"Context retrieved: {context[:100]}...")  # Log first 100 chars of context for debugging
+
+    # Compose messages for model (system + history + context + new prompt)
     messages = [{"role": "system", "content": "Eres un asistente cordial y amable para e-commerce."}]
     for msg in history:
         messages.append({"role": msg['sender'], "content": msg['text']})
+    if context:
+        messages.append({"role": "system", "content": f"Contexto relevante:\n{context}"})
     messages.append({"role": "user", "content": prompt})
 
     response_text = None
