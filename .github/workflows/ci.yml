@@ -70,6 +70,3 @@ jobs:
         with:
           app-name: ai-chatbot-grupo66
           images: docker.io/jpablodrexler/ai-chatbot:${{ env.TAG }}
-        env:
-          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
-          AZURE_SEARCH_ADMIN_KEY: ${{ secrets.AZURE_SEARCH_ADMIN_KEY }}

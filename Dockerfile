@@ -1,10 +1,6 @@
 # Use an official Python runtime as a parent image
 FROM python:3.11-slim
 
-# Set environment variables
-ENV AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
-ENV AZURE_SEARCH_ADMIN_KEY=${AZURE_SEARCH_ADMIN_KEY}
-
 # Set the working directory in the container
 WORKDIR /chatbot
 
