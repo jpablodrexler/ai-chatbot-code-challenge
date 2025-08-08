@@ -260,7 +260,8 @@ chat_template = """
 </head>
 <body>
     <div class="chat-container">
-        <h2>Chat</h2>
+        <h2>Keystorm Chat</h2>
+        <h3>Keyboards seller</h3>
         <div class="chat-box">
             {% for msg in messages %}
                 <div class="message {{ msg['sender'] }}">{{ msg['text'] }}</div>
