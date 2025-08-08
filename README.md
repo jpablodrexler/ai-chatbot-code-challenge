@@ -146,3 +146,38 @@ These commands can be executed locally by installing [Docker Desktop](https://ww
    docker create --name tempchatbot chatbot
    docker export tempchatbot | tar -t > imagefiles.txt
    docker rm tempchatbot
+```
+
+## RAG
+
+### /reset-data endpoint
+
+The `/reset-data` endpoint is used to initialize and populate the Azure AI Search vector database with context data for Retrieval-Augmented Generation (RAG).
+
+**Purpose:**
+
+- This endpoint clears any existing data in the Azure AI Search index and uploads new context chunks from the file `keystorm_vector_chunks.json`.
+- It should be called once (or whenever you want to refresh the context data) to ensure the vector database contains the latest information to be used in prompts.
+
+**Data Source:**
+
+- The data is read from `keystorm_vector_chunks.json`, which contains an array of objects with the following structure:
+  - `title`: Title of the context chunk
+  - `content`: Text content to be used as context. In the example it was splitted semantically
+  - `tags`: List of tags describing the chunk
+
+**How it works:**
+
+1. Deletes all existing documents in the Azure AI Search index to avoid duplicates.
+2. Reads all chunks from `keystorm_vector_chunks.json`.
+3. Uploads each chunk (with its content and embedding) to the Azure AI Search index.
+
+**Example curl call:**
+
+```bash
+curl -X POST https://ai-chatbot-grupo66-fkgmbmedhxgqf7b6.centralus-01.azurewebsites.net/reset-data \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>"'
+```
+
+**Note:** You only need to call this endpoint once after deployment or when updating the context data. The uploaded data will be used by the chatbot to retrieve relevant context for user prompts.

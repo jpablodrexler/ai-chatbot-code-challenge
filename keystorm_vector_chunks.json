@@ -1,0 +1,170 @@
+[
+  {
+    "title": "Business Description",
+    "content": "Keystorm Labs is a boutique mechanical keyboard company dedicated to crafting high-performance, fully customizable keyboards for enthusiasts, gamers, and professionals. Our mission is to blend precision engineering with personal expression, offering a wide range of options to build your dream keyboard from the ground up.",
+    "tags": ["about", "company", "mission", "overview"]
+  },
+  {
+    "title": "Storm60 Keyboard Details",
+    "content": "Storm60 is a compact 60% keyboard featuring Gateron Red linear switches, a matte black aluminum case, and white-on-black PBT keycaps. It connects via USB-C and is priced at $129.99 with a 10% discount for first-time buyers.",
+    "tags": ["product", "Storm60", "keyboard", "linear", "discount"]
+  },
+  {
+    "title": "EchoTKL Keyboard Details",
+    "content": "EchoTKL is a tenkeyless keyboard with Kailh Box White clicky switches, a translucent RGB-lit case, and double-shot ABS keycaps. It\u2019s priced at $149.99 with a $10 bundle discount.",
+    "tags": ["product", "EchoTKL", "keyboard", "clicky", "RGB", "discount"]
+  },
+  {
+    "title": "NimbusPro Keyboard Details",
+    "content": "NimbusPro is a full-size wireless keyboard with hot-swappable sockets, Bluetooth 5.1 and USB-C connectivity, and a sleek silver aluminum case. Price: $189.99. Free shipping on orders over $150.",
+    "tags": [
+      "product",
+      "NimbusPro",
+      "keyboard",
+      "wireless",
+      "hot-swappable",
+      "discount"
+    ]
+  },
+  {
+    "title": "Pulse75 Keyboard Details",
+    "content": "Pulse75 is a 75% layout keyboard with Cherry MX Brown tactile switches, a gunmetal gray case, and optional artisan keycaps. Wired or Bluetooth. Price: $159.99. 15% off for newsletter subscribers.",
+    "tags": ["product", "Pulse75", "keyboard", "tactile", "artisan", "discount"]
+  },
+  {
+    "title": "NovaMini Keyboard Details",
+    "content": "NovaMini is a 60% Bluetooth-only keyboard with Gateron Yellow linear switches, frosted acrylic case, and pastel-themed PBT keycaps. Price: $139.99. Buy 2, get 1 50% off.",
+    "tags": [
+      "product",
+      "NovaMini",
+      "keyboard",
+      "Bluetooth",
+      "linear",
+      "discount"
+    ]
+  },
+  {
+    "title": "How to Order",
+    "content": "Users can browse the catalog, customize their keyboard, add to cart, and checkout using credit/debit cards, PayPal, Apple Pay, or Google Pay.",
+    "tags": ["ordering", "checkout", "payment", "customization"]
+  },
+  {
+    "title": "Shipping Details",
+    "content": "Shipping requires full name, address, contact number, and email. Options include standard, express, and international. Free shipping on orders over $150 (U.S. only).",
+    "tags": ["shipping", "delivery", "requirements", "free shipping"]
+  },
+  {
+    "title": "Support & Returns",
+    "content": "Issues like defective parts, wrong items, or connectivity problems can be resolved via chatbot, email, or phone. Free replacements or refunds available depending on the case.",
+    "tags": ["support", "returns", "refunds", "troubleshooting"]
+  },
+  {
+    "title": "Warranty and Compatibility FAQs",
+    "content": "All keyboards have a 1-year warranty. Keycaps fit MX-style stems. Bluetooth models support Windows, macOS, iOS, Android.",
+    "tags": ["FAQ", "warranty", "compatibility", "support"]
+  },
+  {
+    "title": "Switch Types Explained",
+    "content": "Linear switches (Gateron Red/Yellow) are smooth and quiet. Tactile switches (Cherry MX Brown) offer bump feedback. Clicky switches (Kailh Box White) provide audible clicks.",
+    "tags": ["FAQ", "switches", "comparison", "typing", "gaming"]
+  },
+  {
+    "title": "Order Tracking via Chatbot",
+    "content": "Users can enter their order number to get real-time updates, estimated delivery, and tracking links via chatbot.",
+    "tags": ["tracking", "order status", "chatbot", "delivery"]
+  },
+  {
+    "title": "Product Reviews and Sentiment",
+    "content": "Each product includes verified user reviews and ratings. Chatbot can summarize feedback and highlight pros/cons using sentiment analysis.",
+    "tags": ["reviews", "ratings", "feedback", "sentiment", "recommendations"]
+  },
+  {
+    "title": "Keystorm Rewards Program",
+    "content": "Earn 1 point per $1 spent. 100 points = $10 discount. Birthday bonus: 50 points. Referral bonus: 100 points. Points redeemable at checkout.",
+    "tags": ["loyalty", "rewards", "points", "discount", "referral"]
+  },
+  {
+    "title": "Company History",
+    "content": "Founded in 2018, Keystorm Labs started as a small group of keyboard enthusiasts in Austin, Texas. Today, we serve thousands of customers worldwide and sponsor major gaming and tech events.",
+    "tags": ["about", "history", "company", "events"]
+  },
+  {
+    "title": "StormPad Macro Keyboard",
+    "content": "StormPad is a 12-key programmable macro pad with hot-swappable switches, customizable RGB lighting, and USB-C connectivity. Ideal for streamers and productivity workflows. Price: $59.99.",
+    "tags": [
+      "product",
+      "StormPad",
+      "macro pad",
+      "programmable",
+      "hot-swappable"
+    ]
+  },
+  {
+    "title": "Aurora65 Keyboard Details",
+    "content": "Aurora65 is a 65% layout keyboard featuring silent linear switches, a frosted polycarbonate case, and per-key RGB. Price: $169.99. Includes free artisan keycap for pre-orders.",
+    "tags": ["product", "Aurora65", "keyboard", "silent", "RGB", "artisan"]
+  },
+  {
+    "title": "Keycap Sets",
+    "content": "We offer over 30 keycap sets in PBT, ABS, and resin, including themed sets for gaming, retro, and minimalist styles. Prices range from $29.99 to $89.99.",
+    "tags": ["parts", "keycaps", "PBT", "ABS", "resin", "themed"]
+  },
+  {
+    "title": "Switches",
+    "content": "Choose from over 20 switch types: linear, tactile, clicky, silent, and speed switches. Brands include Gateron, Cherry, Kailh, and NovelKeys. Sold in packs of 10, 70, or 100.",
+    "tags": ["parts", "switches", "linear", "tactile", "clicky", "brands"]
+  },
+  {
+    "title": "Cases",
+    "content": "Cases available in aluminum, polycarbonate, acrylic, and wood. Sizes: 60%, 65%, TKL, full-size. Custom engraving available for an extra fee.",
+    "tags": ["parts", "cases", "materials", "custom", "engraving"]
+  },
+  {
+    "title": "PCBs",
+    "content": "We stock universal and model-specific PCBs with support for QMK/VIA firmware, hot-swap sockets, and RGB underglow. Prices from $39.99.",
+    "tags": ["parts", "PCB", "firmware", "QMK", "VIA", "hot-swap"]
+  },
+  {
+    "title": "Stabilizers",
+    "content": "Premium screw-in and clip-in stabilizers for all layouts. Lubed and unlubed options. Compatible with MX-style PCBs.",
+    "tags": ["parts", "stabilizers", "lubed", "clip-in", "screw-in"]
+  },
+  {
+    "title": "Cables",
+    "content": "Custom coiled USB-C and USB-A cables in multiple colors and lengths. Aviator connectors available. Prices from $19.99.",
+    "tags": ["parts", "cables", "USB-C", "USB-A", "aviator", "custom"]
+  },
+  {
+    "title": "Services Offered",
+    "content": "Keystorm Labs provides a full suite of services: keyboard assembly, switch lubing, keycap installation, PCB soldering, firmware flashing, troubleshooting, and cleaning. All services available in-store and by mail-in.",
+    "tags": [
+      "services",
+      "assembly",
+      "lubing",
+      "installation",
+      "soldering",
+      "troubleshooting",
+      "cleaning"
+    ]
+  },
+  {
+    "title": "Assembly-Only Service",
+    "content": "Already have your parts? Ship them to us and our technicians will assemble your keyboard to your specifications. Assembly-only service starts at $49.99.",
+    "tags": ["services", "assembly", "custom", "mail-in"]
+  },
+  {
+    "title": "Firmware Flashing Service",
+    "content": "We offer QMK and VIA firmware flashing for compatible PCBs. Includes keymap customization and macro setup. Service fee: $19.99 per board.",
+    "tags": ["services", "firmware", "QMK", "VIA", "customization"]
+  },
+  {
+    "title": "Switch Lubing Service",
+    "content": "Professional switch lubing for smoother keystrokes and reduced noise. Available for all major switch brands. $0.50 per switch.",
+    "tags": ["services", "lubing", "switches", "noise", "smooth"]
+  },
+  {
+    "title": "Bulk Orders & Corporate Gifts",
+    "content": "We support bulk orders for businesses, schools, and gaming teams. Custom branding and packaging available. Contact sales@keystormlabs.com for quotes.",
+    "tags": ["services", "bulk", "corporate", "branding", "custom"]
+  }
+]
