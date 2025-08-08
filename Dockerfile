@@ -15,6 +15,7 @@ RUN pip install PyJWT
 RUN pip install langgraph
 RUN pip install langchain[openai]
 RUN pip install langchain-community
+RUN pip install azure-search-documents
 
 # Make port 5000 available to the world outside this container
 EXPOSE 5000

@@ -7,3 +7,4 @@ langchain[openai]
 langchain-community
 pytest
 openai
+azure-search-documents
